@@ -10,9 +10,9 @@ foreach($sources as $source) {
 		if($ext == 'zip') {
 			shell_exec('wget '.escapeshellarg($source).' -O master.zip; unzip -o master.zip; rm -f master.zip;');
 		} elseif($ext == 'gz') {
-			shell_exec('wget '.escapeshellarg($source).' -O master.tar.gz; tar xfz master.tar.gz --overwrite; rm -f master.tar.gz;');
+			shell_exec('wget '.escapeshellarg($source).' -O master.tar.gz; tar xfz master.tar.gz --overwrite --unlink-first; rm -f master.tar.gz;');
 		} elseif($ext == 'tar') {
-			shell_exec('wget '.escapeshellarg($source).' -O master.tar.gz; tar xf master.tar --overwrite; rm -f master.tar;');
+			shell_exec('wget '.escapeshellarg($source).' -O master.tar.gz; tar xf master.tar --overwrite --unlink-first; rm -f master.tar;');
 		}
 		if(empty(shell_exec('cat index.php | grep _ENV'))) { //index.php changed
 			header('Location: '.$_SERVER['REQUEST_URI']);
