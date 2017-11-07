@@ -3,7 +3,6 @@
 session_start();
 $sources = array_filter($_ENV, function($key) {return strpos($key, 'SOURCE_CODE') === 0;}, ARRAY_FILTER_USE_KEY);
 ksort($sources);
-$md5 = md5_file(__FILE__);
 foreach($sources as $source) {
 	$httpcode = shell_exec('curl -I --output /dev/null -w "%{http_code}" '.escapeshellarg($source));
 	$ext = pathinfo($source, PATHINFO_EXTENSION);
@@ -15,9 +14,10 @@ foreach($sources as $source) {
 		} elseif($ext == 'tar') {
 			shell_exec('wget '.escapeshellarg($source).' -O master.tar.gz; tar xf master.tar --overwrite; rm -f master.tar;');
 		}
-		if($md5 !== md5_file(__FILE__)) { //index.php changed
+		if(empty(shell_exec('cat index.php | grep _ENV'))) { //index.php changed
 			header('Location: '.$_SERVER['REQUEST_URI']);
 			exit;
+			break;
 		}
 	}
 }
