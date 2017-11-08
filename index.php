@@ -9,7 +9,7 @@ foreach($sources as $source) {
 	if($httpcode == 200) {
 		switch($ext) {
 			case 'gz': shell_exec('curl -o master.tar.gz '.escapeshellarg($source).'; tar xfz master.tar.gz --overwrite; rm -f master.tar.gz;'); break;
-			case 'tar': shell_exec('curl -o master.tar.gz '.escapeshellarg($source).'; tar xf master.tar --overwrite; rm -f master.tar;'); break;
+			case 'tar': shell_exec('curl -o master.tar '.escapeshellarg($source).'; tar xf master.tar --overwrite; rm -f master.tar;'); break;
 			case 'zip': shell_exec('curl -o master.zip '.escapeshellarg($source).'; unzip -o master.zip; rm -f master.zip;'); break;
 		}
 		if(empty(shell_exec('cat index.php | grep _ENV'))) { //index.php changed
@@ -24,5 +24,5 @@ header('HTTP/1.1 503 Service Temporarily Unavailable');
 header('Status: 503 Service Temporarily Unavailable');
 header('Retry-After: 300');
 
-echo '<h1>Service Temporarily Unavailable</h1>';
-echo '<p>Please reload this page after a while or contact the site administrator.</p>';
+echo '<h1>Service Temporarily Unavailable</h1>'.
+'<p>Please reload this page after a while or contact the site administrator.</p>';
